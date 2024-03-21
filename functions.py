@@ -15,6 +15,14 @@ DENMARK_CRS = "EPSG:25832"
 
 
 def save_layer_into_db(gdf, database_name="test_database", table_name="test", if_exists="replace", keep_only_geometry=True):
+    """
+    Save a geodataframe into a sqlite database.
+    :param gdf: geodataframe
+    :param database_name: name of the database
+    :param table_name: name of the table
+    :param if_exists: replace or append
+    :param keep_only_geometry: keep only geometry
+    """
     # Prepare for save it
     gdf['geometry'] = gdf['geometry'].apply(lambda x: x.wkt)
     if keep_only_geometry:
@@ -25,6 +33,13 @@ def save_layer_into_db(gdf, database_name="test_database", table_name="test", if
     gdf.to_sql(table_name, con=engine, if_exists=if_exists, index=False)
 
 def open_layer_from_db(database_name, table_name, crs ="EPSG:4326"):
+    """
+    Open a geodataframe from a sqlite database.
+    :param database_name: name of the database
+    :param table_name: name of the table
+    :param crs: coordinate reference system
+    :return: geodataframe
+    """
     conn = sqlite3.connect(database_name)
     sql = f"SELECT * FROM {table_name}"
     df = pd.read_sql(sql, conn)
