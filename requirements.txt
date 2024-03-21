@@ -1,0 +1,7 @@
+streamlit
+sqlite3
+pandas
+geopandas
+wkt
+sqlalchemy
+shapely
