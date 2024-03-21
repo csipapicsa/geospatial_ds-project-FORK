@@ -3,3 +3,4 @@ pandas
 geopandas
 sqlalchemy
 shapely
+osmnx
