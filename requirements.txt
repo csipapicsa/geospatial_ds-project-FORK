@@ -1,6 +1,5 @@
 streamlit
 pandas
 geopandas
-wkt
 sqlalchemy
 shapely
