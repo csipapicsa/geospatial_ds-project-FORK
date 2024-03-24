@@ -8,7 +8,7 @@ def main():
     st.title("Test page")
     st.write("This is a demo of Streamlit")
 
-    st.session_state["number_of_elements"] = st.slider("Number of elements in the forest dataset", 0, 20000, 1)
+    st.session_state["number_of_elements"] = st.slider("Number of elements in the forest dataset", 0, 100000, 1)
     st.write(st.session_state["number_of_elements"])
 
     if st.button("Show a test map"):
