@@ -36,8 +36,8 @@ def main():
 
         st.write("**Bike lanes**")
         st.write("Data is shuffled before visualization")
-        st.error("Query parameters are obviusly wrong, but this is just a demo")
-        gdf_3 = gpd.read_parquet("dataset/raw_unprocessed/bikelane.parquet")  # Load your GeoDataFrame
+        #st.error("Query parameters are obviusly wrong, but this is just a demo")
+        gdf_3 = gpd.read_parquet("dataset/raw_unprocessed/bikelane_dk.parquet")  # Load your GeoDataFrame
         # shuffle the data
         gdf_3 = gdf_3.sample(frac=1).reset_index(drop=True)
         st_map3 = folium_static(initFoliumMap(gdf_3, number_of_elements=st.session_state["number_of_elements"]))
