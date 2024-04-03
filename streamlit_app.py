@@ -8,7 +8,7 @@ def main():
     st.title("Test page")
     st.write("This is a demo of Streamlit")
 
-    st.session_state["number_of_elements"] = st.slider("Number of elements in the forest and bikelane dataset", 0, 100000, 1)
+    st.session_state["number_of_elements"] = 100#st.slider("Number of elements in the forest and bikelane dataset", 0, 100000, 1)
     st.warning("Data is schuffled before visualization.")
     st.write(st.session_state["number_of_elements"])
 
