@@ -21,6 +21,7 @@ DATABASE_RAW = "denmark_raw.db"
 DATABASE_CLEAN = "denmark_clean.db"
 CRS = "EPSG:4326" # global
 DENMARK_CRS = "EPSG:25832"
+DENMARK_CRS_INT = 25832
 
 # ---------------------------------------------------------------- #
 #                           MAP RELATED                            #
