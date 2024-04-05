@@ -123,6 +123,11 @@ def geoseries_to_geopandas(geoseries, columns_to_keep = []):
         gdf = gdf[columns_to_keep]
     return gdf
 
+
+# ---------------------------------------------------------------- #
+#                           Testing                                #
+# -----------------------------------------------------------------#
+
 def get_random_elements(gdf, sample=1000):
     """
     Get random elements from a geodataframe.
