@@ -59,3 +59,53 @@ def initFoliumMap(gdf, number_of_elements=[]):
     ma.fit_bounds(ma.get_bounds())
 
     return ma
+
+
+# ---------------------------------------------------------------------------------------------#
+#                                                                   MAP QUERY                  #
+#----------------------------------------------------------------------------------------------#
+
+def get_points_from_draw(input):
+    validator, result = get_points_validator_2(input)
+    if validator == True:
+        st.write(convert_to_coordinate_list(result))
+    else:
+        st.warning("Please draw only points on the area of Denmark")
+
+
+
+def get_points_validator_2(input):
+    res = input["all_drawings"]
+    points = []
+    if type(res) != type(None):
+        for item in res:
+            print("---- Running")
+            #st.write(item["geometry"]["type"])
+            #st.write(item["geometry"]["type"] != "Point")
+            if item["geometry"]["type"] == "Point":
+                coordinates = item["geometry"]["coordinates"][0:2]
+                points.append(coordinates)
+
+    print("Coordinates are: ", points)
+
+    if len(points) != 2:
+        st.warning("Please pick exactly two points")
+        return False, None
+    else:
+        # is it in Denmark? 
+        # 
+        return True, points
+    
+
+def convert_to_coordinate_list(input_data):
+    # Initialize an empty list to hold the converted coordinates
+    coordinates = []
+
+    # Iterate through the input data to extract and convert coordinates
+    for item in input_data:
+        # Each 'item' should be a list containing two elements: longitude and latitude
+        if len(item) == 2:
+            # Append the coordinate pair to the 'coordinates' list
+            coordinates.append([item[0], item[1]])
+
+    return coordinates
