@@ -1,6 +1,8 @@
 import folium
 from streamlit_folium import folium_static
 import streamlit as st
+import geopandas as gpd
+from shapely.geometry import Point, MultiPolygon
 
 def geodataframe_to_map_converter(gdf):
     """
@@ -68,7 +70,8 @@ def initFoliumMap(gdf, number_of_elements=[]):
 def get_points_from_draw(input):
     validator, result = get_points_validator_2(input)
     if validator == True:
-        st.write(convert_to_coordinate_list(result))
+        st.success("Points are valid")
+        return result
     else:
         st.warning("Please draw only points on the area of Denmark")
 
@@ -92,7 +95,13 @@ def get_points_validator_2(input):
         st.warning("Please pick exactly two points")
         return False, None
     else:
-        # is it in Denmark? 
+        # is it in Denmark?
+        if point_validaotr(points):
+            return True, points
+        else:
+            st.warning("Please pick points only inside Denmark")
+            return False, None
+
         # 
         return True, points
     
@@ -109,3 +118,32 @@ def convert_to_coordinate_list(input_data):
             coordinates.append([item[0], item[1]])
 
     return coordinates
+
+
+
+denmark_map = gpd.read_parquet('dataset/processed/borders_of_denmark_projected_WGS84.parquet')
+denmark_wgs84_for_validation = denmark_map.at[0, 'geometry']
+def is_point_inside_polygon(point):
+    """
+    Function to check if a point is inside a polygon
+    :param point: list of float [longitude, latitude]
+    :param polygon: shapely.geometry.Polygon
+    :return: bool
+    """
+    point_obj = Point(point[0], point[1])  # Create a Point object
+    return denmark_wgs84_for_validation.contains(point_obj)
+
+def point_validaotr(points):
+    for point in points:
+        point_obj = Point(point[0], point[1])  # Create a Point object
+        is_inside = is_point_inside_polygon(point)
+        if is_inside:
+            continue
+        else:
+            return False
+    return True
+
+
+
+
+

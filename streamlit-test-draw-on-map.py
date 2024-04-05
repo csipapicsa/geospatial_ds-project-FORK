@@ -26,6 +26,6 @@ with c1:
     output = st_folium(m)
 
 with c2:
-    print(output)
     cleaned_output = stf.get_points_from_draw(output)
-    st.write(cleaned_output)
+    st.write("Points are: ")
+    st.markdown(cleaned_output)
