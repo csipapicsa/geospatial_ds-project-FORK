@@ -122,3 +122,11 @@ def geoseries_to_geopandas(geoseries, columns_to_keep = []):
     if columns_to_keep != []:
         gdf = gdf[columns_to_keep]
     return gdf
+
+def get_random_elements(gdf, sample=1000):
+    """
+    Get random elements from a geodataframe.
+    :param gdf: geodataframe
+    :return: geodataframe
+    """
+    return gdf.sample(n=sample)
