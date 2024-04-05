@@ -3,6 +3,7 @@ from streamlit_folium import folium_static
 import streamlit as st
 import geopandas as gpd
 from shapely.geometry import Point, MultiPolygon
+from pyproj import Transformer
 
 def geodataframe_to_map_converter(gdf):
     """
@@ -67,14 +68,30 @@ def initFoliumMap(gdf, number_of_elements=[]):
 #                                                                   MAP QUERY                  #
 #----------------------------------------------------------------------------------------------#
 
+def project_points(points_wgs84):
+    # Create a transformer object for converting from EPSG:4326 to EPSG:25832
+    transformer = Transformer.from_crs("EPSG:4326", "EPSG:25832", always_xy=True)
+    
+    # Initialize an empty list to store the projected points
+    points_epsg25832 = []
+    
+    # Iterate over each point in the input list
+    for point in points_wgs84:
+        # Transform the point and append to the new list
+        projected_point = transformer.transform(point[0], point[1])
+        points_epsg25832.append(projected_point)
+    
+    return points_epsg25832
+
 def get_points_from_draw(input):
-    validator, result = get_points_validator_2(input)
+    validator, result_wgs, result_dk = get_points_validator_2(input)
+    print(validator, result_wgs, result_dk)
     if validator == True:
         st.success("Points are valid")
-        return result
+        return result_wgs, project_points(result_dk)
     else:
         st.warning("Please draw only points on the area of Denmark")
-
+        return None, None
 
 
 def get_points_validator_2(input):
@@ -93,14 +110,16 @@ def get_points_validator_2(input):
 
     if len(points) != 2:
         st.warning("Please pick exactly two points")
-        return False, None
+        return False, None, None
     else:
         # is it in Denmark?
         if point_validaotr(points):
-            return True, points
+            print(" POINT TYPE ")
+            print(type(points))
+            return True, points, points
         else:
             st.warning("Please pick points only inside Denmark")
-            return False, None
+            return False, None, None
 
         # 
         return True, points

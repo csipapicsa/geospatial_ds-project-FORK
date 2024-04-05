@@ -6,3 +6,4 @@ shapely
 osmnx
 folium
 streamlit_folium 
+pyproj

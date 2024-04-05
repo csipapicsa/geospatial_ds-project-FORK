@@ -26,6 +26,8 @@ with c1:
     output = st_folium(m)
 
 with c2:
-    cleaned_output = stf.get_points_from_draw(output)
-    st.write("Points are: ")
-    st.markdown(cleaned_output)
+    cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(output)
+    st.write("Points are (WGS84): ")
+    st.markdown(cleaned_output_wgs)
+    st.write("Points are (EPSG:25832): ")
+    st.markdown(cleaned_output_denmark_crs)
