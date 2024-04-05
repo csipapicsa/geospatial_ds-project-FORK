@@ -112,13 +112,13 @@ def merge_files(input_dir, output_file):
     except subprocess.CalledProcessError as e:
         print(f"Error merging files: {e}")
 
-def geoseries_to_geopandas(geoseries, columns_to_keep = []):
+def geoseries_to_geopandas(geoseries, crs, columns_to_keep = []):
     """
     Create a GeoDataFrame from a GeoSeries.
     :return: GeoDataFrame
     """
     gdf = gpd.GeoDataFrame(geoseries, columns=['geometry'])
-    gdf.crs = DENMARK_CRS
+    gdf.crs = crs
     if columns_to_keep != []:
         gdf = gdf[columns_to_keep]
     return gdf
