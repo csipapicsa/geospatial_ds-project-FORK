@@ -5,12 +5,17 @@
 import geopandas as gpd
 import pandas as pd
 from shapely import wkt
+from shapely.geometry import Point
 
 # database, sql
 from sqlalchemy import create_engine
 import sqlite3
 import subprocess
 import os
+
+# maps
+import h3
+import folium
 
 # ---------------------------------------------------------------- #
 #                          GLOBAL VARIABLES                        #
@@ -22,6 +27,7 @@ DATABASE_CLEAN = "denmark_clean.db"
 CRS = "EPSG:4326" # global
 DENMARK_CRS = "EPSG:25832"
 DENMARK_CRS_INT = 25832
+H3_INDEX_RESOLUTION = 6
 
 # ---------------------------------------------------------------- #
 #                           MAP RELATED                            #
@@ -60,6 +66,63 @@ def open_layer_from_db(database_name, table_name, crs ="EPSG:4326"):
     gdf = gpd.GeoDataFrame(df, geometry='geometry')
     gdf.crs = crs
     return gdf
+
+def h3_index_visualizer(h3_index):
+    """
+    Visualize a h3 index.
+    :param h3_index: h3 index
+    """
+    h3_boundary = h3.h3_to_geo_boundary(h3_index, geo_json=True)
+    map = folium.Map(location=[h3_boundary[0][0], h3_boundary[0][1]], zoom_start=12)
+    folium.Polygon(locations=h3_boundary, color='blue', fill=True).add_to(map)
+    return map
+
+def get_h3_index_from_point(point, resolution=H3_INDEX_RESOLUTION):
+    """
+    Get h3 index from a point.
+    :param point: point
+    :param resolution: resolution of the h3 index
+    :return: h3 index
+    """
+    # <class 'shapely.geometry.point.Point'>
+    if type(point) == Point:
+        return h3.geo_to_h3(point.x, point.y, resolution)
+    else:
+        return h3.geo_to_h3(point[1], point[0], resolution)
+    
+def filter_geopandas_by_u_v_index(u_value, v_value, gdf):
+    """
+    Filter linestrings by u and v values.
+    :param u_value: u value
+    :param v_value: v value
+    :param gdf: geodataframe
+    :return: filtered geodataframe
+    """
+    print(u_value, v_value)
+    # Filter the GeoDataFrame for rows where 'u' is u_value or 'v' is v_value
+    filtered_gdf = gdf.loc[(u_value, v_value)]
+    return filtered_gdf
+
+def closest_coordinate_on_linestring(point, linestring):
+    """
+    Get the closest coordinate on a linestring.
+    :param point: point
+    :param linestring: linestring
+    :return: closest coordinate
+    """
+    closest_point = None
+    min_distance = float('inf')
+
+    # Iterate through each coordinate in the LineString
+    for coord in linestring.coords:
+        ls_point = Point(coord)
+        distance = point.distance(ls_point)
+        if distance < min_distance:
+            min_distance = distance
+            closest_point = ls_point
+
+    return closest_point
+
 
 # ---------------------------------------------------------------- #
 #                           PREPARATION                            #
