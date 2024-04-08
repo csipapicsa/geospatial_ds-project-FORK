@@ -124,6 +124,8 @@ def closest_coordinate_on_linestring(point, linestring):
     return closest_point
 
 
+
+
 # ---------------------------------------------------------------- #
 #                           PREPARATION                            #
 # -----------------------------------------------------------------#
