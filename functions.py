@@ -187,6 +187,32 @@ def geoseries_to_geopandas(geoseries, crs, columns_to_keep = []):
     return gdf
 
 
+def buffer_and_union_and_simplify_geopandas(gdf, buffer=50, simplify_value=0, debug=True):
+    """
+    Buffer and union a geodataframe.
+    :param gdf: geodataframe
+    :param buffer: buffer in meter
+    :return: geodataframe
+    """
+    if gdf.crs != DENMARK_CRS:
+        raise ValueError(f"The geodataframe must be in the correct coordinate system. In this case it must be in {DENMARK_CRS}. Now it is in {gdf.crs}.")
+    else:
+        if debug:
+            print("buffer objects start")
+        gdf = gdf.buffer(buffer)
+        if debug:
+            print("unary union starts")
+        gdf = gdf.unary_union
+        gdf = gpd.GeoSeries(gdf)
+        gdf = geoseries_to_geopandas(gdf, DENMARK_CRS)
+        if simplify_value != 0:
+            if debug:
+                print("simplify objects start")
+            gdf = gdf.simplify(simplify_value)
+            gdf = geoseries_to_geopandas(gdf, DENMARK_CRS)
+        return gdf
+
+
 # ---------------------------------------------------------------- #
 #                           Testing                                #
 # -----------------------------------------------------------------#
