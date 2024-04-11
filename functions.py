@@ -203,7 +203,10 @@ def buffer_and_union_and_simplify_geopandas(gdf, buffer=50, simplify_value=0, de
         if debug:
             print("unary union starts")
         gdf = gdf.unary_union
+        if debug:
+            print("unary union ends")
         gdf = gpd.GeoSeries(gdf)
+        
         gdf = geoseries_to_geopandas(gdf, DENMARK_CRS)
         if simplify_value != 0:
             if debug:
