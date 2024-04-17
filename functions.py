@@ -6,6 +6,7 @@ import geopandas as gpd
 import pandas as pd
 from shapely import wkt
 from shapely.geometry import Point
+import streamlit as st
 
 # database, sql
 from sqlalchemy import create_engine
@@ -16,6 +17,15 @@ import os
 # maps
 import h3
 import folium
+
+# services
+import openrouteservice
+
+# ---------------------------------------------------------------- #
+#                          INIT                                    #
+# -----------------------------------------------------------------#
+
+client = openrouteservice.Client(key=st.secrets["OPENROUTSERVICE_API"])
 
 # ---------------------------------------------------------------- #
 #                          GLOBAL VARIABLES                        #
@@ -123,6 +133,31 @@ def closest_coordinate_on_linestring(point, linestring):
 
     return closest_point
 
+def get_routes_from_coordinates(coordinates):
+    """
+    Get routes from coordinates.
+    :param coordinates: coordinates in WGS84 format
+    :param profile: profile
+    :return: routes
+    """
+    # Get routes
+    routes = client.directions(coordinates=coordinates,
+                           profile='cycling-regular',
+                           format='geojson')
+    return routes
+
+
+def routes_to_gdf(routes):
+    """
+    Convert routes to a geodataframe.
+    :param routes: routes
+    :return: geodataframe
+    """
+    # Convert to geodataframe
+    gdf = gpd.GeoDataFrame.from_features(routes['features'])
+    gdf.crs = 'EPSG:4326'
+    return gdf
+
 
 # ---------------------------------------------------------------- #
 #                           PREPARATION                            #
@@ -214,7 +249,37 @@ def buffer_and_union_and_simplify_geopandas(gdf, buffer=50, simplify_value=0, de
             gdf = gdf.simplify(simplify_value)
             gdf = geoseries_to_geopandas(gdf, DENMARK_CRS)
         return gdf
+    
+def denmark_projection(gdf):
+    """
+    Project a geodataframe to the correct coordinate system.
+    :param gdf: geodataframe
+    :return: geodataframe
+    """
+    if gdf.crs != DENMARK_CRS:
+        gdf = gdf.to_crs(DENMARK_CRS)
+    return gdf
 
+
+def get_already_touched_areas_along_the_way(areas_with_bikelanes, route_gdf):
+    if areas_with_bikelanes.crs != route_gdf:
+        raise ValueError(f"The geodataframe must be in the correct coordinate system. In this case it must be in {DENMARK_CRS}. Now it is in {areas_with_bikelanes.crs} and {route_gdf.crs}.")
+    else:
+        areas_already_touced = gpd.overlay(areas_with_bikelanes, route_gdf, how='intersection')
+        return areas_already_touced
+
+def get_buffered_zone(gdf, buffer=100):
+    """
+    Get buffered zone.
+    :param gdf: geodataframe
+    :param buffer: buffer in meter
+    :return: geodataframe
+    """
+    if gdf.crs != DENMARK_CRS:
+        raise ValueError(f"The geodataframe must be in the correct coordinate system. In this case it must be in {DENMARK_CRS}. Now it is in {gdf.crs}.")
+    else:
+        gdf = buffer_and_union_and_simplify_geopandas(gdf, buffer)
+        return gdf
 
 # ---------------------------------------------------------------- #
 #                           Testing                                #
