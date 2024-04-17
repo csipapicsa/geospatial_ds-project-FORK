@@ -63,6 +63,13 @@ def initFoliumMap(gdf, number_of_elements=[]):
 
     return ma
 
+def gdf_to_folium_map(gdf, lat, lon, zoom_start=7):
+    m = folium.Map(location=[lat, lon], zoom_start=zoom_start)
+    for _, row in gdf.iterrows():
+        folium.GeoJson(data=row['geometry']).add_to(m)
+                       # tooltip=row['some_property']).add_to(m)  # Customize tooltip as needed
+    return m
+
 
 # ---------------------------------------------------------------------------------------------#
 #                                                                   MAP QUERY                  #
@@ -83,9 +90,12 @@ def project_points(points_wgs84):
     
     return points_epsg25832
 
-def get_points_from_draw(input):
-    validator, result_wgs, result_dk = get_points_validator_2(input)
-    print(validator, result_wgs, result_dk)
+def get_points_from_draw(input, method="draw"):
+    if method == "draw":
+        validator, result_wgs, result_dk = get_points_validator_2(input)
+    elif method == "debug":
+        validator, result_wgs, result_dk = True, input, input
+
     if validator == True:
         st.success("Points are valid")
         return result_wgs, project_points(result_dk)
@@ -99,14 +109,14 @@ def get_points_validator_2(input):
     points = []
     if type(res) != type(None):
         for item in res:
-            print("---- Running")
+
             #st.write(item["geometry"]["type"])
             #st.write(item["geometry"]["type"] != "Point")
             if item["geometry"]["type"] == "Point":
                 coordinates = item["geometry"]["coordinates"][0:2]
                 points.append(coordinates)
 
-    print("Coordinates are: ", points)
+
 
     if len(points) != 2:
         st.warning("Please pick exactly two points")
@@ -114,8 +124,8 @@ def get_points_validator_2(input):
     else:
         # is it in Denmark?
         if point_validaotr(points):
-            print(" POINT TYPE ")
-            print(type(points))
+
+
             return True, points, points
         else:
             st.warning("Please pick points only inside Denmark")
@@ -137,7 +147,6 @@ def convert_to_coordinate_list(input_data):
             coordinates.append([item[0], item[1]])
 
     return coordinates
-
 
 
 denmark_map = gpd.read_parquet('dataset/processed/borders_of_denmark_projected_WGS84.parquet')

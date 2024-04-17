@@ -1,33 +1,35 @@
 # --------------------------------------------------------------------------#
-#                                   DEMO FUNCTION                           #
+#                                   MAIN site                          #
 # run from the command line: 'streamlit run streamlit-test-draw-on-map.py'  #
 # --------------------------------------------------------------------------#
 
-
-import folium
 import streamlit as st
-from folium.plugins import Draw
-import streamlit_functions as stf
+from streamlit_draw import streamlit_draw_page_init
 
-from streamlit_folium import st_folium
+def main():
+    if st.sidebar.button("Draw on map"):
+        st.session_state.current_page = "draw"
+    if st.sidebar.button("Settings"):
+        st.session_state.current_page = "settings"
+        None
+    if st.sidebar.button("About"):
+        st.session_state.current_page = "about"
+        None
+    if st.sidebar.button("Additonal maps"):
+        st.session_state.current_page = "additional"
+        None
 
-bounds = [
-    [57.751949, 8.085938],  # Northwest corner of Denmark
-    [54.559322, 12.832031]  # Southeast corner of Denmark
-]
+    if st.session_state.current_page == "draw":
+        streamlit_draw_page_init()
+    elif st.session_state.current_page == "settings":
+        st.write("Settings page")
+    elif st.session_state.current_page == "about":
+        st.write("About page")
+    elif st.session_state.current_page == "additional":
+        st.write("Additional maps page")
+    else:
+        st.write("No page selected")
 
-m = folium.Map(location=[56.2639, 10.5018], zoom_start=7)
-# m.fit_bounds(bounds)
-# m = folium.Map(location=[54.2639, 12.5018], zoom_start=6)
-Draw(export=True).add_to(m)
-
-c1, c2 = st.columns([10, 2])
-with c1:
-    output = st_folium(m)
-
-with c2:
-    cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(output)
-    st.write("Points are (WGS84): ")
-    st.markdown(cleaned_output_wgs)
-    st.write("Points are (EPSG:25832): ")
-    st.markdown(cleaned_output_denmark_crs)
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "draw"
+main()
