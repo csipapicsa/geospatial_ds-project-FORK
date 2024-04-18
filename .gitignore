@@ -169,3 +169,5 @@ cache/f42540da1b665302e502f79c814a6b6eb4af59fe.json
 
 # folders
 _private_datasets/
+dataset/raw_unprocessed/bikelane_dk_crs_25832.parquet
+dataset/raw_unprocessed/bikelane_dk_WGS84_h3_indexed.parquet
