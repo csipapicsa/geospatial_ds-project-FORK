@@ -13,7 +13,7 @@ import time
 from streamlit_folium import st_folium, folium_static
 from functions import get_routes_from_coordinates, routes_to_gdf
 
-DEBUG = True
+DEBUG = False
 
 def streamlit_draw_page_init():
     bounds = [

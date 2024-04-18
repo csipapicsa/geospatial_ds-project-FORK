@@ -292,3 +292,20 @@ def get_random_elements(gdf, sample=1000):
     :return: geodataframe
     """
     return gdf.sample(n=sample)
+
+def print_gdf_details(gdf):
+    """
+    Prints out details of a GeoDataFrame: its info, number of duplicated rows, and total memory usage.
+    """
+    # Printing the basic info
+    print("GeoDataFrame details:")
+    gdf.info()
+
+    # Finding the number of duplicated rows
+    num_duplicates = gdf.duplicated().sum()
+    print(f"Number of duplicated rows: {num_duplicates}")
+
+    # Finding the memory usage
+    mem_usage = gdf.memory_usage(deep=True).sum()
+    print(f"Memory usage (bytes): {mem_usage}")
+    print(f"Memory usage (MB): {mem_usage / 1024 ** 2:.2f} MB")
