@@ -280,6 +280,26 @@ def get_buffered_zone(gdf, buffer=100):
     else:
         gdf = buffer_and_union_and_simplify_geopandas(gdf, buffer)
         return gdf
+    
+def drop_duplicated_rows(gdf):
+    """
+    Drop duplicated rows.
+    :param gdf: geodataframe
+    :return: geodataframe
+    """
+    gdf = gdf.drop_duplicates()
+    return gdf
+
+def keep_only_geo_objects(gdf, geometries = ["Polygon", "MultiPolygon"]):
+    """
+    Keep only geo objects.
+    :param gdf: geodataframe
+    :param geometries: geometries to keep
+    :return: geodataframe
+    """
+    gdf = gdf[gdf.geometry.type.isin(geometries)]
+    return gdf
+
 
 # ---------------------------------------------------------------- #
 #                           Testing                                #
@@ -299,7 +319,7 @@ def print_gdf_details(gdf):
     """
     # Printing the basic info
     print("GeoDataFrame details:")
-    gdf.info()
+    print(gdf.info())
 
     # Finding the number of duplicated rows
     num_duplicates = gdf.duplicated().sum()
@@ -309,3 +329,37 @@ def print_gdf_details(gdf):
     mem_usage = gdf.memory_usage(deep=True).sum()
     print(f"Memory usage (bytes): {mem_usage}")
     print(f"Memory usage (MB): {mem_usage / 1024 ** 2:.2f} MB")
+    print(f"Set of geometry objects: {set(gdf.geom_type)}")
+
+
+# ---------------------------------------------------------------- #
+#                               UNUSED AND DECRAPTED FUNCTIONS     #
+#------------------------------------------------------------------#
+
+def add_h3_index_for_gdf(gdf, resolution=H3_INDEX_RESOLUTION):
+
+    """
+    Add h3 index for a geodataframe.
+    :param gdf: geodataframe
+    :return: geodataframe
+    --- Highly reccomende: https://wolf-h3-viewer.glitch.me/
+    """
+    if gdf.crs != CRS:
+        raise ValueError(f"The geodataframe must be in the correct coordinate system. In this case, it must be in {CRS}. Now it is in {gdf.crs}.")
+        """    if "h3_index" in gdf.columns:
+        gdf.drop(columns=['h3_index'], inplace=True)
+        print(f"The geodataframe already has a column named 'h3_index'. The column has been removed. Please try again.")
+        continue"""
+    else:
+        h3_indices = []
+        for row in gdf.itertuples(index=False):
+            h3_index = h3.geo_to_h3(row.geometry.centroid.y, row.geometry.centroid.x, resolution)
+            h3_indices.append(h3_index)
+        gdf['h3_index'] = h3_indices
+        return gdf
+    
+def get_centorid_of_polygin(polygon):
+    """
+    Return lan ang long values
+    """
+    return polygon.centroid.x, polygon.centroid.y
