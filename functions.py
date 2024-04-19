@@ -158,6 +158,38 @@ def routes_to_gdf(routes):
     gdf.crs = 'EPSG:4326'
     return gdf
 
+def get_only_areas_which_are_crossed_by_bikelane(gdf_to_keep, bikelanes):
+    if gdf_to_keep.crs != bikelanes.crs:
+        raise Exception("CRS mismatch. Please make sure both geodataframes have the same CRS.")
+    all_geometry_objects = objects_in_geodataframe(gdf_to_keep)
+    # drop indexies 
+    gdf_to_keep = gdf_to_keep.reset_index(drop=True)
+    bikelanes = bikelanes.reset_index(drop=True)
+    # keep only geometry columns
+    gdf_to_keep = gdf_to_keep[["geometry"]]
+    bikelanes = bikelanes[["geometry"]]
+    if "Point" in all_geometry_objects or "LineString" in all_geometry_objects:
+        gdf_to_keep = keep_only_geo_objects(gdf_to_keep)
+    if "MultiPolygon" in all_geometry_objects:
+        gdf_to_keep = gdf_to_keep.explode()
+
+    if gdf_to_keep.sindex is None or bikelanes.sindex is None:
+        raise Exception("Spatial index missing. Please create a spatial index for both geodataframes.")
+
+    joined_df = gpd.sjoin(
+        gdf_to_keep,
+        bikelanes,
+        how="left", # options are left, right, inner or outer
+        predicate="intersects", # can be contains, crosses, overlaps, within, etc.
+    )
+    print(joined_df.head())
+    joined_df.dropna(subset=['index_right'], inplace=True)
+    joined_df.drop(columns=['index_right'], inplace=True)
+    joined_df = drop_duplicated_rows(joined_df)
+    joined_df = joined_df[["geometry"]]
+
+    return joined_df
+
 
 # ---------------------------------------------------------------- #
 #                           PREPARATION                            #
@@ -280,6 +312,31 @@ def get_buffered_zone(gdf, buffer=100):
     else:
         gdf = buffer_and_union_and_simplify_geopandas(gdf, buffer)
         return gdf
+    
+def drop_duplicated_rows(gdf):
+    """
+    Drop duplicated rows.
+    :param gdf: geodataframe
+    :return: geodataframe
+    """
+    gdf = gdf.drop_duplicates()
+    return gdf
+
+def keep_only_geo_objects(gdf, geometries = ["Polygon", "MultiPolygon"]):
+    """
+    Keep only geo objects.
+    :param gdf: geodataframe
+    :param geometries: geometries to keep
+    :return: geodataframe
+    """
+    gdf = gdf[gdf.geometry.type.isin(geometries)]
+    return gdf
+
+def objects_in_geodataframe(gdf):
+    return set(gdf.geometry.type)
+
+
+
 
 # ---------------------------------------------------------------- #
 #                           Testing                                #
@@ -292,3 +349,54 @@ def get_random_elements(gdf, sample=1000):
     :return: geodataframe
     """
     return gdf.sample(n=sample)
+
+def print_gdf_details(gdf):
+    """
+    Prints out details of a GeoDataFrame: its info, number of duplicated rows, and total memory usage.
+    """
+    # Printing the basic info
+    print("GeoDataFrame details:")
+    print(gdf.info())
+
+    # Finding the number of duplicated rows
+    num_duplicates = gdf.duplicated().sum()
+    print(f"Number of duplicated rows: {num_duplicates}")
+
+    # Finding the memory usage
+    mem_usage = gdf.memory_usage(deep=True).sum()
+    print(f"Memory usage (bytes): {mem_usage}")
+    print(f"Memory usage (MB): {mem_usage / 1024 ** 2:.2f} MB")
+    print(f"Set of geometry objects: {set(gdf.geom_type)}")
+
+
+# ---------------------------------------------------------------- #
+#                               UNUSED AND DECRAPTED FUNCTIONS     #
+#------------------------------------------------------------------#
+
+def add_h3_index_for_gdf(gdf, resolution=H3_INDEX_RESOLUTION):
+
+    """
+    Add h3 index for a geodataframe.
+    :param gdf: geodataframe
+    :return: geodataframe
+    --- Highly reccomende: https://wolf-h3-viewer.glitch.me/
+    """
+    if gdf.crs != CRS:
+        raise ValueError(f"The geodataframe must be in the correct coordinate system. In this case, it must be in {CRS}. Now it is in {gdf.crs}.")
+        """    if "h3_index" in gdf.columns:
+        gdf.drop(columns=['h3_index'], inplace=True)
+        print(f"The geodataframe already has a column named 'h3_index'. The column has been removed. Please try again.")
+        continue"""
+    else:
+        h3_indices = []
+        for row in gdf.itertuples(index=False):
+            h3_index = h3.geo_to_h3(row.geometry.centroid.y, row.geometry.centroid.x, resolution)
+            h3_indices.append(h3_index)
+        gdf['h3_index'] = h3_indices
+        return gdf
+    
+def get_centorid_of_polygin(polygon):
+    """
+    Return lan ang long values
+    """
+    return polygon.centroid.x, polygon.centroid.y
