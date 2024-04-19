@@ -158,6 +158,38 @@ def routes_to_gdf(routes):
     gdf.crs = 'EPSG:4326'
     return gdf
 
+def get_only_areas_which_are_crossed_by_bikelane(gdf_to_keep, bikelanes):
+    if gdf_to_keep.crs != bikelanes.crs:
+        raise Exception("CRS mismatch. Please make sure both geodataframes have the same CRS.")
+    all_geometry_objects = objects_in_geodataframe(gdf_to_keep)
+    # drop indexies 
+    gdf_to_keep = gdf_to_keep.reset_index(drop=True)
+    bikelanes = bikelanes.reset_index(drop=True)
+    # keep only geometry columns
+    gdf_to_keep = gdf_to_keep[["geometry"]]
+    bikelanes = bikelanes[["geometry"]]
+    if "Point" in all_geometry_objects or "LineString" in all_geometry_objects:
+        gdf_to_keep = keep_only_geo_objects(gdf_to_keep)
+    if "MultiPolygon" in all_geometry_objects:
+        gdf_to_keep = gdf_to_keep.explode()
+
+    if gdf_to_keep.sindex is None or bikelanes.sindex is None:
+        raise Exception("Spatial index missing. Please create a spatial index for both geodataframes.")
+
+    joined_df = gpd.sjoin(
+        gdf_to_keep,
+        bikelanes,
+        how="left", # options are left, right, inner or outer
+        predicate="intersects", # can be contains, crosses, overlaps, within, etc.
+    )
+    print(joined_df.head())
+    joined_df.dropna(subset=['index_right'], inplace=True)
+    joined_df.drop(columns=['index_right'], inplace=True)
+    joined_df = drop_duplicated_rows(joined_df)
+    joined_df = joined_df[["geometry"]]
+
+    return joined_df
+
 
 # ---------------------------------------------------------------- #
 #                           PREPARATION                            #
@@ -299,6 +331,11 @@ def keep_only_geo_objects(gdf, geometries = ["Polygon", "MultiPolygon"]):
     """
     gdf = gdf[gdf.geometry.type.isin(geometries)]
     return gdf
+
+def objects_in_geodataframe(gdf):
+    return set(gdf.geometry.type)
+
+
 
 
 # ---------------------------------------------------------------- #
