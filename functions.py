@@ -182,7 +182,6 @@ def get_only_areas_which_are_crossed_by_bikelane(gdf_to_keep, bikelanes):
         how="left", # options are left, right, inner or outer
         predicate="intersects", # can be contains, crosses, overlaps, within, etc.
     )
-    print(joined_df.head())
     joined_df.dropna(subset=['index_right'], inplace=True)
     joined_df.drop(columns=['index_right'], inplace=True)
     joined_df = drop_duplicated_rows(joined_df)
@@ -282,6 +281,18 @@ def buffer_and_union_and_simplify_geopandas(gdf, buffer=50, simplify_value=0, de
             gdf = geoseries_to_geopandas(gdf, DENMARK_CRS)
         return gdf
     
+def buffer_gdf(gdf, buffer=100):
+    """
+    Buffer a geodataframe.
+    :param gdf: geodataframe
+    :param buffer: buffer in meter
+    :return: geodataframe
+    """
+    gdf = gdf.buffer(buffer)
+    # convert it into a geodataframe
+    gdf = geoseries_to_geopandas(gdf, gdf.crs)
+    return gdf
+    
 def denmark_projection(gdf):
     """
     Project a geodataframe to the correct coordinate system.
@@ -334,6 +345,17 @@ def keep_only_geo_objects(gdf, geometries = ["Polygon", "MultiPolygon"]):
 
 def objects_in_geodataframe(gdf):
     return set(gdf.geometry.type)
+
+def list_of_points_to_coordinates(list_of_points):
+    coordinates = []
+    # Iterate over each Point object in the list
+    for point in list_of_points:
+        # Extract the x and y coordinates of the Point
+        x, y = point.x, point.y
+        # Append the coordinates as a list to the main list
+        coordinates.append([x, y])
+
+    return coordinates
 
 
 
