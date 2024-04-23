@@ -4,6 +4,9 @@
 # --------------------------------------------------------------------------#
 
 import streamlit as st
+
+st.set_page_config(layout="wide")
+
 from streamlit_draw import draw_page_init
 from settings import settings_page_init
 import geopandas as gpd
@@ -27,7 +30,14 @@ def main():
 
 
     if st.session_state.current_page == "draw":
-        draw_page_init()
+            # Divide the container into three columns
+        style = "<style>h2 {text-align: center;}</style>"
+        st.markdown(style, unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 8, 1])  # The middle column gets twice the space
+
+        # Use the middle column to display your app's content
+        with col2:
+            draw_page_init()  # Call your function to display the map and other elements
     elif st.session_state.current_page == "settings":
         settings_page_init()
     elif st.session_state.current_page == "about":

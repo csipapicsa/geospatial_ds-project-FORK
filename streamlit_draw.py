@@ -22,12 +22,12 @@ def draw_page_init():
         [54.559322, 12.832031]  # Southeast corner of Denmark
     ]
 
-    m = folium.Map(location=[56.2639, 10.5018], zoom_start=7)
+    m = folium.Map(location=[56.2639, 10.5018], zoom_start=7, width=700, height=1000)
     # m.fit_bounds(bounds)
     # m = folium.Map(location=[54.2639, 12.5018], zoom_start=6)
     Draw(export=True).add_to(m)
 
-    output = st_folium(m, key="base_map")
+    output = st_folium(m, key="base_map", height=1000, width=1000)
 
     if st.button("Calculate"):
         st.session_state.phase_2 = False
@@ -84,7 +84,8 @@ def draw_page_init():
         # exttract the already visited forest areas
         indices_to_exclude = st.session_state.forest_areas_already_in_the_road_wg84.index
         # Drop rows from temp dataframe based on indices_to_exclude
-        not_visited_forest_areas_dk = st.session_state.forest_areas_already_in_the_road_wg84.drop(indices_to_exclude)
+        not_visited_forest_areas_dk = can_be_reached_forest_areas.drop(indices_to_exclude)
+        st.write("Extra forest areas: ", len(not_visited_forest_areas_dk))
 
         # keep only the X biggest ones
         not_visited_forest_areas_dk["area"] = not_visited_forest_areas_dk["geometry"].area
@@ -101,14 +102,14 @@ def draw_page_init():
 
         additional_centroids_coordinates = f.list_of_points_to_coordinates(additional_centroids)
         expanded_coordinates = [st.session_state.cleaned_output_wgs[0]] + additional_centroids_coordinates + [st.session_state.cleaned_output_wgs[1]]
-        
+        # st.write("All points", len(expanded_coordinates))
         # rerouting
         st.session_state.shortest_path_df_2_wgs84 = routes_to_gdf(get_routes_from_coordinates(expanded_coordinates, BUFFER))
         # map it
         lat, lon = st.session_state.shortest_path_df_2_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
         shortest_path_2 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_2_wgs84, lat, lon)
-        st.session_state.forest_areas_already_in_the_road_2_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_2_wgs84)
-        st.write(" Number of forest areas already in the road: ", len(st.session_state.forest_areas_already_in_the_road_2_wg84))
+        #st.session_state.forest_areas_already_in_the_road_2_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_2_wgs84)
+        #st.write(" Number of forest areas already in the road: ", len(st.session_state.forest_areas_already_in_the_road_2_wg84))
         #map_2 = folium_static(shortest_path_1 , width=700, height=500)
         map_3 = folium_static(shortest_path_2)
 
