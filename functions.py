@@ -133,7 +133,7 @@ def closest_coordinate_on_linestring(point, linestring):
 
     return closest_point
 
-def get_routes_from_coordinates(coordinates):
+def get_routes_from_coordinates(coordinates, radius):
     """
     Get routes from coordinates.
     :param coordinates: coordinates in WGS84 format
@@ -141,9 +141,14 @@ def get_routes_from_coordinates(coordinates):
     :return: routes
     """
     # Get routes
+    radiuses = [1000] * len(coordinates) 
+
     routes = client.directions(coordinates=coordinates,
-                           profile='cycling-regular',
-                           format='geojson')
+                            profile='cycling-regular',
+                            format='geojson',
+                            radiuses=radiuses,
+                            optimize_waypoints=True,
+                            optimized=False)
     return routes
 
 
