@@ -80,12 +80,12 @@ def draw_page_init():
 
         # get forest areas along the buffered bikelane
         can_be_reached_forest_areas = f.get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_dk, gdf_routes_DK_buffered)
-        st.write("!!! Can be reached forest areas with the shortest path", len(can_be_reached_forest_areas))
+        st.write("!!! Total forest areas can be reached by the actual settings", len(can_be_reached_forest_areas))
         # exttract the already visited forest areas
         indices_to_exclude = st.session_state.forest_areas_already_in_the_road_wg84.index
         # Drop rows from temp dataframe based on indices_to_exclude
         not_visited_forest_areas_dk = can_be_reached_forest_areas.drop(indices_to_exclude)
-        st.write("Extra forest areas: ", len(not_visited_forest_areas_dk))
+        # st.write("Extra forest areas: ", len(not_visited_forest_areas_dk))
 
         # keep only the X biggest ones
         not_visited_forest_areas_dk["area"] = not_visited_forest_areas_dk["geometry"].area
