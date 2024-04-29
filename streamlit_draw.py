@@ -65,7 +65,7 @@ def draw_page_init():
 
             # get already visited forest areas 
             st.session_state.forest_areas_already_in_the_road_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_wgs84)
-            st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_wg84))
+            #st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_wg84))
             st.session_state.forest_areas_already_in_the_road_dk = st.session_state.forest_areas_already_in_the_road_wg84.to_crs(DENMARK_CRS)
             st.session_state.shortest_path_1_line_segments_across_forest_dk = st.session_state.shortest_path_df_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
 
