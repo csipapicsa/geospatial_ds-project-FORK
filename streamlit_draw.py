@@ -13,38 +13,45 @@ import time
 from streamlit_folium import st_folium, folium_static
 from functions import get_routes_from_coordinates, routes_to_gdf, DENMARK_CRS, get_only_areas_which_are_crossed_by_bikelane
 import functions as f
+from statisticspy import statistics_page_init
+from howtouse import howtouse_page_init
 
 DEBUG = False
 
 def draw_page_init():
+
+    st.write("## Pick up two points")
+    st.write("1. Pick up two points on the map by choosing clicking on the map")
+
+
     bounds = [
         [57.751949, 8.085938],  # Northwest corner of Denmark
         [54.559322, 12.832031]  # Southeast corner of Denmark
     ]
 
-    m = folium.Map(location=[56.2639, 10.5018], zoom_start=7, width=700, height=1000)
+    st.session_state.m = folium.Map(location=[56.2639, 10.5018], zoom_start=7, width=700, height=1000)
     # m.fit_bounds(bounds)
     # m = folium.Map(location=[54.2639, 12.5018], zoom_start=6)
-    Draw(export=True).add_to(m)
+    Draw(export=True).add_to(st.session_state.m)
 
-    output = st_folium(m, key="base_map", height=1000, width=1000)
+    st.session_state.output = st_folium(st.session_state.m , key="base_map", height=1000, width=1000)
+
 
     if st.button("Calculate"):
         st.session_state.phase_2 = False
-        st.session_state.cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(output, method="draw")
-        st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(output)
+        st.session_state.cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(st.session_state.output, method="draw")
+        st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(st.session_state.output)
         st.write("Points are (WGS84): ")
         st.markdown(st.session_state.cleaned_output_wgs)
         st.write("Points are (EPSG:25832): ")
         st.markdown(cleaned_output_denmark_crs)
-        st.session_state.phase_1 = False
         if st.session_state.validator:
             st.session_state.phase_2 = True
 
     if DEBUG:
         coordinates1 = [[11.581726, 55.606109], [11.699829, 55.592143]]
         st.session_state.cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(coordinates1, method="debug")
-        st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(output)
+        st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(st.session_state.output)
         st.session_state.phase_2 = True
 
 
@@ -55,6 +62,14 @@ def draw_page_init():
             shortest_path_1 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_wgs84, lat, lon)
             #map_2 = folium_static(shortest_path_1 , width=700, height=500)
             map_2 = folium_static(shortest_path_1)
+
+            # get already visited forest areas 
+            st.session_state.forest_areas_already_in_the_road_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_wgs84)
+            st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_wg84))
+            st.session_state.forest_areas_already_in_the_road_dk = st.session_state.forest_areas_already_in_the_road_wg84.to_crs(DENMARK_CRS)
+            st.session_state.shortest_path_1_line_segments_across_forest_dk = st.session_state.shortest_path_df_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
+
+            # move forward
             st.session_state.phase_3 = True
 
     if DEBUG:
@@ -68,9 +83,6 @@ def draw_page_init():
     #                  🌿              GOING THROUGH FOREST   🌲               #
     # --------------------------------------------------------------------------#
     if st.session_state.get("phase_3", False):
-        st.session_state.forest_areas_already_in_the_road_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_wgs84)
-        st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_wg84))
-        st.session_state.forest_areas_already_in_the_road_dk = st.session_state.forest_areas_already_in_the_road_wg84.to_crs(DENMARK_CRS)
         BUFFER = st.session_state.bikelane_buffer
         ADD_MORE_AREA_TO_BE_VISITED = st.session_state.number_of_forest_areas
 
@@ -109,9 +121,16 @@ def draw_page_init():
         lat, lon = st.session_state.shortest_path_df_2_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
         shortest_path_2 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_2_wgs84, lat, lon)
         #st.session_state.forest_areas_already_in_the_road_2_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_2_wgs84)
-        #st.write(" Number of forest areas already in the road: ", len(st.session_state.forest_areas_already_in_the_road_2_wg84))
-        #map_2 = folium_static(shortest_path_1 , width=700, height=500)
+
+        # get already visited forest areas 
+        st.session_state.forest_areas_already_in_the_road_2_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_2_wgs84)
+        st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_2_wg84))
+        st.session_state.forest_areas_already_in_the_road_2_dk = st.session_state.forest_areas_already_in_the_road_2_wg84.to_crs(DENMARK_CRS)
+        st.session_state.shortest_path_2_line_segments_across_forest_dk = st.session_state.shortest_path_df_2_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_2_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
+
         map_3 = folium_static(shortest_path_2)
+
+        statistics_page_init()
 
 
         
