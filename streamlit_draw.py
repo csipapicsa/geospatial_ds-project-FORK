@@ -14,7 +14,7 @@ from streamlit_folium import st_folium, folium_static
 from functions import get_routes_from_coordinates, routes_to_gdf, DENMARK_CRS, get_only_areas_which_are_crossed_by_bikelane
 import functions as f
 from statisticspy import statistics_page_init
-from howtouse import howtouse_page_init
+
 
 DEBUG = False
 
@@ -41,10 +41,10 @@ def draw_page_init():
         st.session_state.phase_2 = False
         st.session_state.cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(st.session_state.output, method="draw")
         st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(st.session_state.output)
-        st.write("Points are (WGS84): ")
-        st.markdown(st.session_state.cleaned_output_wgs)
-        st.write("Points are (EPSG:25832): ")
-        st.markdown(cleaned_output_denmark_crs)
+        #st.write("Points are (WGS84): ")
+        #st.markdown(st.session_state.cleaned_output_wgs)
+        #st.write("Points are (EPSG:25832): ")
+        #st.markdown(cleaned_output_denmark_crs)
         if st.session_state.validator:
             st.session_state.phase_2 = True
 
@@ -56,7 +56,7 @@ def draw_page_init():
 
 
     if st.session_state.get("phase_2", False):
-        if st.button("Show me shortest path"):
+        if st.button("Show me the shortest path"):
             st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs, 350))
             lat, lon = st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
             shortest_path_1 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_wgs84, lat, lon)
@@ -83,6 +83,7 @@ def draw_page_init():
     #                  🌿              GOING THROUGH FOREST   🌲               #
     # --------------------------------------------------------------------------#
     if st.session_state.get("phase_3", False):
+        st.write("##### The path, which is going through more forest areas")
         BUFFER = st.session_state.bikelane_buffer
         ADD_MORE_AREA_TO_BE_VISITED = st.session_state.number_of_forest_areas
 
@@ -92,7 +93,7 @@ def draw_page_init():
 
         # get forest areas along the buffered bikelane
         can_be_reached_forest_areas = f.get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_dk, gdf_routes_DK_buffered)
-        st.write("!!! Total forest areas can be reached by the actual settings", len(can_be_reached_forest_areas))
+        st.write("Total forest areas can be reached by the actual settings", len(can_be_reached_forest_areas))
         # exttract the already visited forest areas
         indices_to_exclude = st.session_state.forest_areas_already_in_the_road_wg84.index
         # Drop rows from temp dataframe based on indices_to_exclude

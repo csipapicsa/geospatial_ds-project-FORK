@@ -32,10 +32,10 @@ def main():
         st.session_state.current_page = "how_to_page"
     if st.sidebar.button("Settings", type="primary"):
         st.session_state.current_page = "settings"
-    if st.sidebar.button("About"):
-        st.session_state.current_page = "about"
-    if st.sidebar.button("Additonal maps"):
-        st.session_state.current_page = "additional"
+    #if st.sidebar.button("About"):
+        #st.session_state.current_page = "about"
+    #if st.sidebar.button("Additonal maps"):
+        #st.session_state.current_page = "additional"
     if st.sidebar.button("Panic!"):
         # clear session state
         st.session_state.clear()
@@ -65,12 +65,13 @@ def main():
         st.write("Additional maps page")
     elif st.session_state.current_page == "init":
         with st.spinner("Loading..."):
-            st.title("Welcome! The page is loading...")
-            st.write("Loading some dataset...")
+            st.title("Welcome!")
+            st.write("##### The purpose of this app is to help you maximize your visit to forest areas during your bike trip across Denmark.")
             st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_wgs84.parquet')
             st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
             st.session_state.number_of_forest_areas = 5
             st.session_state.bikelane_buffer = 500
+            st.write("##### Please check the 'How to use it?' section to see how to use the app.")
         
 
     else:
