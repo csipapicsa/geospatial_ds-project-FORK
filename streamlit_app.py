@@ -9,12 +9,15 @@ st.set_page_config(layout="wide")
 
 from streamlit_draw import draw_page_init
 from settings import settings_page_init
+from statisticspy import statistics_page_init
 import geopandas as gpd
 import functions as f
 
 def main():
     if st.sidebar.button("Draw on map"):
         st.session_state.current_page = "draw"
+    if st.sidebar.button("Statistics"):
+        st.session_state.current_page = "statistics_page"
     if st.sidebar.button("Settings"):
         st.session_state.current_page = "settings"
     if st.sidebar.button("About"):
@@ -40,6 +43,8 @@ def main():
             draw_page_init()  # Call your function to display the map and other elements
     elif st.session_state.current_page == "settings":
         settings_page_init()
+    elif st.session_state.current_page == "statistics_page":
+        statistics_page_init()
     elif st.session_state.current_page == "about":
         st.write("About page")
     elif st.session_state.current_page == "additional":
