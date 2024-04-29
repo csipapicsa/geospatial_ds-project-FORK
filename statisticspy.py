@@ -8,10 +8,13 @@ def statistics_page_init():
             st.session_state.shortest_path_df_dk = st.session_state.shortest_path_df_wgs84.to_crs(DENMARK_CRS)
             st.write("Length of the shortest path is:")
             st.write(f"{st.session_state.shortest_path_df_dk.length.sum() / 1000:.2f} km")
-            st.write("total length of the road across forest areas is:")
-            st.write(f"{st.session_state.shortest_path_1_line_segments_across_forest_dk.length.sum() / 1000:.2f} km")
-            st.write("Percentage of the forest area:")
-            st.write(f"{st.session_state.shortest_path_1_line_segments_across_forest_dk.length.sum() / st.session_state.shortest_path_df_dk.length.sum() * 100:.2f} %")
+            if st.session_state.no_forest_areas_along_the_path:
+                st.write("No forest area has been crossed by the path")
+            else:
+                st.write("total length of the road across forest areas is:")
+                st.write(f"{st.session_state.shortest_path_1_line_segments_across_forest_dk.length.sum() / 1000:.2f} km")
+                st.write("Percentage of the forest area:")
+                st.write(f"{st.session_state.shortest_path_1_line_segments_across_forest_dk.length.sum() / st.session_state.shortest_path_df_dk.length.sum() * 100:.2f} %")
     else:
         st.write("No road has been calculated")
     # add a separator 

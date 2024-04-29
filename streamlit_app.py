@@ -71,6 +71,7 @@ def main():
             st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
             st.session_state.number_of_forest_areas = 5
             st.session_state.bikelane_buffer = 500
+            st.session_state.no_forest_areas_along_the_path = False
             st.write("##### Please check the 'How to use it?' section to see how to use the app.")
         
 

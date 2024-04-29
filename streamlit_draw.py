@@ -17,6 +17,7 @@ from statisticspy import statistics_page_init
 
 
 DEBUG = False
+DEBUG_2 = True
 
 def draw_page_init():
 
@@ -37,12 +38,13 @@ def draw_page_init():
     st.session_state.output = st_folium(st.session_state.m , key="base_map", height=1000, width=1000)
 
 
-    if st.button("Calculate"):
+    if st.button("Validate", type="primary"):
         st.session_state.phase_2 = False
         st.session_state.cleaned_output_wgs, cleaned_output_denmark_crs = stf.get_points_from_draw(st.session_state.output, method="draw")
         st.session_state.validator, result_wgs, result_dk = stf.get_points_validator_2(st.session_state.output)
-        #st.write("Points are (WGS84): ")
-        #st.markdown(st.session_state.cleaned_output_wgs)
+        if DEBUG_2:
+            st.write("Points are (WGS84): ")
+            st.markdown(st.session_state.cleaned_output_wgs)
         #st.write("Points are (EPSG:25832): ")
         #st.markdown(cleaned_output_denmark_crs)
         if st.session_state.validator:
@@ -56,18 +58,31 @@ def draw_page_init():
 
 
     if st.session_state.get("phase_2", False):
-        if st.button("Show me the shortest path"):
+        if st.button("Show me the shortest path", type="primary"):
+            # Create a Folium Map object
+            map_2 = folium.Map()
             st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs, 350))
             lat, lon = st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
             shortest_path_1 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_wgs84, lat, lon)
+            # Add the GeoDataFrame features to the map
+            folium.GeoJson(st.session_state.shortest_path_df_wgs84).add_to(map_2)
             #map_2 = folium_static(shortest_path_1 , width=700, height=500)
-            map_2 = folium_static(shortest_path_1)
+            # Get the bounds of the features in the GeoDataFrame
+            bounds = st.session_state.shortest_path_df_wgs84.total_bounds.tolist()
+            # Fit the map to the bounds
+            map_2.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
+
+            # Display the map
+            folium_static(map_2)
 
             # get already visited forest areas 
             st.session_state.forest_areas_already_in_the_road_wg84 = get_only_areas_which_are_crossed_by_bikelane(st.session_state.forest_areas_with_bikelanes_wgs84, st.session_state.shortest_path_df_wgs84)
             #st.write(" Number of forest areas along the path: ", len(st.session_state.forest_areas_already_in_the_road_wg84))
             st.session_state.forest_areas_already_in_the_road_dk = st.session_state.forest_areas_already_in_the_road_wg84.to_crs(DENMARK_CRS)
-            st.session_state.shortest_path_1_line_segments_across_forest_dk = st.session_state.shortest_path_df_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
+            if st.session_state.forest_areas_already_in_the_road_dk.empty:
+                st.session_state.no_forest_areas_along_the_path = True
+            else:
+                st.session_state.shortest_path_1_line_segments_across_forest_dk = st.session_state.shortest_path_df_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
 
             # move forward
             st.session_state.phase_3 = True
@@ -129,7 +144,19 @@ def draw_page_init():
         st.session_state.forest_areas_already_in_the_road_2_dk = st.session_state.forest_areas_already_in_the_road_2_wg84.to_crs(DENMARK_CRS)
         st.session_state.shortest_path_2_line_segments_across_forest_dk = st.session_state.shortest_path_df_2_wgs84.geometry.intersection(st.session_state.forest_areas_already_in_the_road_2_wg84.geometry.unary_union, align=False).to_crs(f.DENMARK_CRS)
 
-        map_3 = folium_static(shortest_path_2)
+        # Create a Folium Map object
+        map_3 = folium.Map()
+        # Add the GeoDataFrame features to the map
+        folium.GeoJson(st.session_state.shortest_path_df_2_wgs84).add_to(map_3)
+        
+        # Get the bounds of the features in the GeoDataFrame
+        bounds_2 = st.session_state.shortest_path_df_2_wgs84.total_bounds.tolist()
+
+        # Fit the map to the bounds
+        map_3.fit_bounds([[bounds_2[1], bounds_2[0]], [bounds_2[3], bounds_2[2]]])
+
+        # Display the map
+        folium_static(map_3)
 
         statistics_page_init()
 
