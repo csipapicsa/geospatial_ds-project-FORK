@@ -61,7 +61,7 @@ def draw_page_init():
         if st.button("Show me the shortest path", type="primary"):
             # Create a Folium Map object
             map_2 = folium.Map()
-            st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs, 350))
+            st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs, 350, call="streamlit", mode=st.session_state.bike_mode_new))
             lat, lon = st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
             shortest_path_1 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_wgs84, lat, lon)
             # Add the GeoDataFrame features to the map
@@ -88,7 +88,7 @@ def draw_page_init():
             st.session_state.phase_3 = True
 
     if DEBUG:
-        st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs))
+        st.session_state.shortest_path_df_wgs84 = routes_to_gdf(get_routes_from_coordinates(st.session_state.cleaned_output_wgs, 0, call="streamlit", mode=st.session_state.bike_mode_new))
         lat, lon = st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
         shortest_path_1_wgs84 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_wgs84, lat, lon)
         #map_2 = folium_static(shortest_path_1 , width=700, height=500)
@@ -132,7 +132,7 @@ def draw_page_init():
         expanded_coordinates = [st.session_state.cleaned_output_wgs[0]] + additional_centroids_coordinates + [st.session_state.cleaned_output_wgs[1]]
         # st.write("All points", len(expanded_coordinates))
         # rerouting
-        st.session_state.shortest_path_df_2_wgs84 = routes_to_gdf(get_routes_from_coordinates(expanded_coordinates, BUFFER))
+        st.session_state.shortest_path_df_2_wgs84 = routes_to_gdf(get_routes_from_coordinates(expanded_coordinates, BUFFER, call="streamlit", mode=st.session_state.bike_mode_new))
         # map it
         lat, lon = st.session_state.shortest_path_df_2_wgs84.geometry.centroid.iloc[0].y, st.session_state.shortest_path_df_wgs84.geometry.centroid.iloc[0].x
         shortest_path_2 = stf.gdf_to_folium_map(st.session_state.shortest_path_df_2_wgs84, lat, lon)

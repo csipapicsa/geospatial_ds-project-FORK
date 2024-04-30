@@ -5,6 +5,7 @@ import geopandas as gpd
 from shapely.geometry import Point, MultiPolygon
 from pyproj import Transformer
 
+
 def geodataframe_to_map_converter(gdf):
     """
     Display a geodataframe on a map.
