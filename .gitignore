@@ -172,3 +172,4 @@ _private_datasets/
 cache/
 dataset/raw_unprocessed/bikelane_dk_crs_25832.parquet
 dataset/raw_unprocessed/bikelane_dk_WGS84_h3_indexed.parquet
+dataset/raw_unprocessed/denmark_green_spaces_crs_wgs84.parquet
