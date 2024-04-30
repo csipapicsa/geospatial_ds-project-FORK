@@ -67,8 +67,10 @@ def main():
         with st.spinner("Loading..."):
             st.title("Welcome!")
             st.write("##### The purpose of this app is to help you maximize your visit to forest areas during your bike trip across Denmark.")
-            st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_wgs84.parquet')
-            st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
+            #st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_wgs84.parquet')
+            st.session_state.green_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/green_areas_crossed_by_bikelane_wgs84.parquet')
+            #st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
+            st.session_state.green_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/green_areas_crossed_by_bikelane_DK.parquet')
             st.session_state.number_of_forest_areas = 1
             st.session_state.bikelane_buffer = 500
             st.session_state.no_forest_areas_along_the_path = False
