@@ -69,9 +69,14 @@ def main():
             st.write("##### The purpose of this app is to help you maximize your visit to forest areas during your bike trip across Denmark.")
             st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_wgs84.parquet')
             st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
-            st.session_state.number_of_forest_areas = 5
+            st.session_state.number_of_forest_areas = 1
             st.session_state.bikelane_buffer = 500
             st.session_state.no_forest_areas_along_the_path = False
+            st.session_state.max_forest_area = 40
+            st.session_state.bike_mode_new = "Regular"
+            # st.session_state.bike_mode_old = "Mountain bike"
+            st.session_state.number_of_forest_areas_new = 5
+            st.session_state.bikelane_buffer_new = 500
             st.write("##### Please check the 'How to use it?' section to see how to use the app.")
         
 

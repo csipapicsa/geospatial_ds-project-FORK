@@ -20,6 +20,7 @@ import folium
 
 # services
 import openrouteservice
+import streamlit as st
 
 # ---------------------------------------------------------------- #
 #                          INIT                                    #
@@ -38,6 +39,12 @@ CRS = "EPSG:4326" # global
 DENMARK_CRS = "EPSG:25832"
 DENMARK_CRS_INT = 25832
 H3_INDEX_RESOLUTION = 6
+
+BIKE_OPTION_DICT = {
+    "Regular": 'cycling-regular',
+    "Mountain bike": 'cycling-mountain',
+}
+
 
 # ---------------------------------------------------------------- #
 #                           MAP RELATED                            #
@@ -133,7 +140,7 @@ def closest_coordinate_on_linestring(point, linestring):
 
     return closest_point
 
-def get_routes_from_coordinates(coordinates, radius):
+def get_routes_from_coordinates(coordinates, radius, call="normal", mode="Regular"):
     """
     Get routes from coordinates.
     :param coordinates: coordinates in WGS84 format
@@ -143,8 +150,16 @@ def get_routes_from_coordinates(coordinates, radius):
     # Get routes
     radiuses = [1000] * len(coordinates) 
 
+    if call == "streamlit":
+        profile_shortest_path = BIKE_OPTION_DICT[mode]
+    elif call == "normal":
+        profile_shortest_path = "cycling-regular"
+        
+    print("------------------------")
+    print("PROFILE:", profile_shortest_path)
+    print("Length of coordinates:", len(coordinates))
     routes = client.directions(coordinates=coordinates,
-                            profile='cycling-regular',
+                            profile=profile_shortest_path,
                             format='geojson',
                             radiuses=radiuses,
                             optimize_waypoints=True,
