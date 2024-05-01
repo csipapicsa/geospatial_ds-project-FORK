@@ -377,6 +377,12 @@ def list_of_points_to_coordinates(list_of_points):
 
     return coordinates
 
+def multipolygon_to_gdf(multipolygon, crs=3857):
+    """
+    Convert a multipolygon to a GeoDataFrame.
+    """
+    return gpd.GeoDataFrame(geometry=[multipolygon], crs=crs)
+
 
 
 
