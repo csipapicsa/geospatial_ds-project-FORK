@@ -442,3 +442,43 @@ def get_centorid_of_polygin(polygon):
     Return lan ang long values
     """
     return polygon.centroid.x, polygon.centroid.y
+
+
+def collect_data(areas: list, tags: dict, path: str):
+    """
+    Function to collect features from OSM using OSMnx library.
+    Arguments:
+     -areas: a list of place geocodes
+     - tags: a dictionary of key, value pairs of "map features" tags.
+     - path: a path where files are saved
+    """
+
+    # For each area
+    for area in areas:
+        # For each key, value pairs
+        for key, values in tags.items():
+            print(f"Looking at area {area}")
+            for val in values:
+                print(f"Looking for {key} - {val}")
+                # Try finding the tag in the area
+                try:
+                    if area == "Nordjylland, Denmark": # Nordjylland Nominatim is not the first result
+                        gdf = ox.features_from_polygon(ox.geocode_to_gdf(query="R1319936", by_osmid=True).loc[0, "geometry"], tags={key: val})
+                    else:
+                        gdf = ox.features_from_place(area, tags={key: val})
+                    
+                    filename = f"./dataset/raw_unprocessed/{area.replace(', Denmark', '').lower()}_{key}_{val}"
+                    # Try saving the file
+                    try:
+                        gdf.to_parquet(f"{filename}_ALL.parquet", flavor="pyspark")
+                    except:
+                        try:
+                            gdf[["geometry", "name"]].to_parquet(f"{filename}.parquet", flavor="pyspark")
+                        except:
+                            try:
+                                gdf[["geometry"]].to_parquet(f"{filename}.parquet", flavor="pyspark")
+                            except:
+                                print(f"Couldn't save {area}, {key}, {val}")
+                except:
+                    print(f">> Nothing found for {key} - {val} <<")
+                    pass
