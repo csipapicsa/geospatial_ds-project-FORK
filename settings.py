@@ -10,7 +10,7 @@ def settings_page_init():
     # st.session_state.number_of_forest_areas = st.slider("Number of extra forest areas to be visited: ", 0, st.session_state.max_forest_area, st.session_state.get("number_of_forest_areas", 5))
     # Slider for selecting number of extra forest areas
     st.session_state.number_of_forest_areas = st.slider(
-        "Number of extra forest areas to be visited: ",
+        "Number of extra green areas to be visited: ",
         0,
         st.session_state.max_forest_area,
         st.session_state.number_of_forest_areas_new
