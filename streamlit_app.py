@@ -20,8 +20,10 @@ from settings import settings_page_init
 from statisticspy import statistics_page_init
 from style_functions import local_css
 from howtouse import howtouse_page_init
+from about import about_page_init
 import geopandas as gpd
 import functions as f
+from folium.plugins import Draw
 
 
 def main():
@@ -32,8 +34,8 @@ def main():
         st.session_state.current_page = "how_to_page"
     if st.sidebar.button("Settings", type="primary"):
         st.session_state.current_page = "settings"
-    #if st.sidebar.button("About"):
-        #st.session_state.current_page = "about"
+    if st.sidebar.button("About"):
+        st.session_state.current_page = "about"
     #if st.sidebar.button("Additonal maps"):
         #st.session_state.current_page = "additional"
     if st.sidebar.button("Panic!"):
@@ -43,7 +45,14 @@ def main():
         st.session_state.bikelane_buffer = 500
         st.session_state.current_page = "init"
         st.session_state.phase_1 = True
+        st.session_state.output_old = []
+        st.session_state.draw = Draw(export=True)
+        try:
+            del st.session_state.ma
+        except:
+            pass
         local_css("style.css")
+        st.cache_data.clear()
 
 
     if st.session_state.current_page == "draw":
@@ -60,7 +69,7 @@ def main():
     elif st.session_state.current_page == "how_to_page":
         howtouse_page_init()
     elif st.session_state.current_page == "about":
-        st.write("About page")
+        about_page_init()
     elif st.session_state.current_page == "additional":
         st.write("Additional maps page")
     elif st.session_state.current_page == "init":
@@ -68,9 +77,9 @@ def main():
             st.title("Welcome!")
             st.write("##### The purpose of this app is to help you maximize your visit to forest areas during your bike trip across Denmark.")
             #st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_wgs84.parquet')
-            st.session_state.green_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/green_areas_crossed_by_bikelane_wgs84.parquet')
+            st.session_state.forest_areas_with_bikelanes_wgs84 = gpd.read_parquet('dataset/processed/green_spaces_crossed_by_bikelane_wgs84.parquet')
             #st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/forest_areas_crossed_by_bikelane_DK.parquet')
-            st.session_state.green_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/green_areas_crossed_by_bikelane_DK.parquet')
+            st.session_state.forest_areas_with_bikelanes_dk = gpd.read_parquet('dataset/processed/green_spaces_crossed_by_bikelane_dk.parquet')
             st.session_state.number_of_forest_areas = 1
             st.session_state.bikelane_buffer = 500
             st.session_state.no_forest_areas_along_the_path = False
@@ -79,7 +88,10 @@ def main():
             # st.session_state.bike_mode_old = "Mountain bike"
             st.session_state.number_of_forest_areas_new = 5
             st.session_state.bikelane_buffer_new = 500
+            st.session_state.output_old = []
+            # st.session_state.draw = Draw(export=True)
             st.write("##### Please check the 'How to use it?' section to see how to use the app.")
+
         
 
     else:
