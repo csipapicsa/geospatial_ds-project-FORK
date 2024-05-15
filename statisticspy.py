@@ -23,7 +23,7 @@ def statistics_page_init():
     if "shortest_path_df_2_wgs84" in st.session_state:
         if st.session_state.shortest_path_df_2_wgs84 is not None:
             st.session_state.shortest_path_df_2_dk = st.session_state.shortest_path_df_2_wgs84.to_crs(DENMARK_CRS)
-            st.write("Length of the second road is:")
+            st.write("Length of the second path is:")
             st.write(f"{st.session_state.shortest_path_df_2_dk.length.sum() / 1000:.2f} km")
             if st.session_state.shortest_path_2_line_segments_across_forest_dk.empty:
                 st.write("No green area has been crossed by the path")
