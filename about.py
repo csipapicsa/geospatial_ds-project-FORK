@@ -12,8 +12,8 @@ def about_page_init():
     st.title("Contributors")
     st.markdown("""
     - Gergo Gyori (email: gergo.gyori@gmail.com)
-    - Gino Fazzi (email: gino.fazzi@gmail.com)
-    - Jacob Rohde (email: jacob.rohde@gmail.com)
+    - Gino Fazzi (email: gifa@itu.dk)
+    - Jacob Rohde (email: jacro@itu.dk)
     """)
     st.divider()
 
