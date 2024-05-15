@@ -24,7 +24,8 @@ st.session_state.draw = Draw(export=True)
 def draw_page_init():
 
     st.write("## Pick up two points")
-    st.write("1. Pick up two points on the map by choosing clicking on the map")
+    st.write("""1. Pick up two points on the map by choosing clicking on the map. 
+             These points represents the start and the end of the route.""")
 
 
     bounds = [
@@ -35,7 +36,7 @@ def draw_page_init():
     st.session_state.ma = folium.Map(location=[56.2639, 10.5018], zoom_start=7, width=700, height=1000)
             # m.fit_bounds(bounds)
             # m = folium.Map(location=[54.2639, 12.5018], zoom_start=6)
-    Draw(export=True).add_to(st.session_state.ma)
+    Draw(export=False).add_to(st.session_state.ma)
 
     st.session_state.output_new = st_folium(st.session_state.ma , key="base_map", height=1000, width=1000)   
 

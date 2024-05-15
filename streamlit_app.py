@@ -28,17 +28,17 @@ from folium.plugins import Draw
 
 def main():
     local_css("style.css")
-    if st.sidebar.button("Draw on map", type="primary"):
+    if st.sidebar.button("🌳 Explore Green Pathways", type="primary"):
         st.session_state.current_page = "draw"
-    if st.sidebar.button("How to use it?", type="primary"):
+    if st.sidebar.button("❓How to use it?", type="primary"):
         st.session_state.current_page = "how_to_page"
-    if st.sidebar.button("Settings", type="primary"):
+    if st.sidebar.button("⚙️ Settings", type="primary"):
         st.session_state.current_page = "settings"
-    if st.sidebar.button("About"):
+    if st.sidebar.button("ℹ️ About"):
         st.session_state.current_page = "about"
     #if st.sidebar.button("Additonal maps"):
         #st.session_state.current_page = "additional"
-    if st.sidebar.button("Panic!"):
+    if st.sidebar.button("😨 Panic!"):
         # clear session state
         st.session_state.clear()
         st.session_state.number_of_forest_areas = 5
