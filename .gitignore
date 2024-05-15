@@ -175,3 +175,7 @@ dataset/raw_unprocessed/bikelane_dk_WGS84_h3_indexed.parquet
 dataset/raw_unprocessed/denmark_green_spaces_crs_wgs84.parquet
 dataset/raw_unprocessed/green_spaces.parquet
 dataset/raw_unprocessed/green_spaces2.parquet
+dataset/processed/bikelane_test_40.parquet
+dataset/raw_unprocessed/bikelane_dk_WGS84_h3_indexed_buffered.parquet
+dataset/raw_unprocessed/bikelane_FINAL.parquet
+results_from_colab.parquet

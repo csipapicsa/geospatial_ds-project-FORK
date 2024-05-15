@@ -1,0 +1,212 @@
+<mxfile host="Electron" modified="2024-05-15T13:44:51.691Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="1VjpXVuSUo_YgFP8aqUw" scale="1" border="0" version="24.0.4" type="device">
+  <diagram name="Page-1" id="4NQJPEbs7rDci1EDDibP">
+    <mxGraphModel dx="1183" dy="685" grid="1" gridSize="4" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-1" value="Load GeoDataframe for filtering (any &lt;b&gt;grean area&lt;/b&gt;)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="534" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-1" edge="1" target="dtMIK_3fSnfbVIC7GjhM-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="769.5" y="570" as="sourcePoint" />
+            <mxPoint x="559.5" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-3" value="Keep only the &quot;geometry&quot; columns" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="379.5" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-3" target="dtMIK_3fSnfbVIC7GjhM-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="579.5" y="590" as="sourcePoint" />
+            <mxPoint x="559.5" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-6" value="Does it contain only Polygon objects?" style="rhombus;whiteSpace=wrap;html=1;spacingTop=0;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="216" y="150" width="135" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-8" value="No" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-6" target="dtMIK_3fSnfbVIC7GjhM-12" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="590" as="sourcePoint" />
+            <mxPoint x="360" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-11" value="Yes" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-6" target="dtMIK_3fSnfbVIC7GjhM-23" edge="1">
+          <mxGeometry x="-0.5192" y="5" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="790" as="sourcePoint" />
+            <mxPoint x="540" y="760" as="targetPoint" />
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="546" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-12" value="Does it contain LineString or Point objects?" style="rhombus;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="36" y="152" width="140" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-13" value="Yes" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-12" target="dtMIK_3fSnfbVIC7GjhM-14" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="480" as="sourcePoint" />
+            <mxPoint x="110" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="36" y="378" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-14" value="Delete them" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="66" y="348" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-15" value="No" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-12" target="dtMIK_3fSnfbVIC7GjhM-16" edge="1">
+          <mxGeometry x="0.0041" y="8" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="440" as="sourcePoint" />
+            <mxPoint x="285" y="520" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="106" y="296" />
+              <mxPoint x="284" y="296" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-16" value="Does it contain MultiPolygon?" style="rhombus;whiteSpace=wrap;html=1;spacingTop=0;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="209.75" y="333" width="147.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-14" target="dtMIK_3fSnfbVIC7GjhM-16" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="500" as="sourcePoint" />
+            <mxPoint x="70" y="630" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-18" value="Yes" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-16" target="dtMIK_3fSnfbVIC7GjhM-19" edge="1">
+          <mxGeometry x="0.2285" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="456" y="504" as="sourcePoint" />
+            <mxPoint x="396" y="536" as="targetPoint" />
+            <Array as="points" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-19" value="Use &#39;explode()&#39; to divide it only Polygon objects" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="223.5" y="462" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-23" value="Is there a spatial index for both dataframes?&amp;nbsp;" style="rhombus;whiteSpace=wrap;html=1;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="432" y="552" width="230" height="87" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-24" value="Load GeoDataFrame contains bikelanes" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="670" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-25" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-24" target="dtMIK_3fSnfbVIC7GjhM-23" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="530" as="sourcePoint" />
+            <mxPoint x="430" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="730" y="596" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-26" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-23" target="dtMIK_3fSnfbVIC7GjhM-31" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="930" as="sourcePoint" />
+            <mxPoint x="540" y="920" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="750" y="639" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-27" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="dtMIK_3fSnfbVIC7GjhM-26" vertex="1" connectable="0">
+          <mxGeometry x="-0.3" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-31" value="Perform spatial join" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="690" y="654" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-32" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-31" target="dtMIK_3fSnfbVIC7GjhM-34" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="1230" as="sourcePoint" />
+            <mxPoint x="547" y="1050" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-34" value="Drop rows where &quot;index_right&quot; is NaN; keep only geoemtry column" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="520" y="654" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-36" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-34" target="dtMIK_3fSnfbVIC7GjhM-38" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="539.5" y="1110" as="sourcePoint" />
+            <mxPoint x="477.25" y="684" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-38" value="Drop duplicated rows" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="351" y="654" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-39" value="END" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+          <mxGeometry x="76" y="644" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-40" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-38" target="dtMIK_3fSnfbVIC7GjhM-41" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="251.25" y="1060" as="sourcePoint" />
+            <mxPoint x="270" y="954" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-41" value="Return filtered GeoDataframe" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="192" y="654" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-42" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-41" target="dtMIK_3fSnfbVIC7GjhM-39" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="730" as="sourcePoint" />
+            <mxPoint x="430" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-43" value="START" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+          <mxGeometry x="690" y="170" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-45" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-43" target="dtMIK_3fSnfbVIC7GjhM-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="310" as="sourcePoint" />
+            <mxPoint x="440" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dtMIK_3fSnfbVIC7GjhM-46" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-43" target="dtMIK_3fSnfbVIC7GjhM-24" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="750" y="280" as="sourcePoint" />
+            <mxPoint x="610" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-2" value="Create spatial index" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="223.5" y="564" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-74" value="No" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-16" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="598" as="sourcePoint" />
+            <mxPoint x="546" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-75" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dtMIK_3fSnfbVIC7GjhM-23" target="3Q8uF8YjgXJoQiHW9nkc-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="764" as="sourcePoint" />
+            <mxPoint x="470" y="714" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-76" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="3Q8uF8YjgXJoQiHW9nkc-75" vertex="1" connectable="0">
+          <mxGeometry x="-0.1847" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-77" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="3Q8uF8YjgXJoQiHW9nkc-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="764" as="sourcePoint" />
+            <mxPoint x="546" y="534" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="284" y="534" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Q8uF8YjgXJoQiHW9nkc-78" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1" source="dtMIK_3fSnfbVIC7GjhM-19">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="688" as="sourcePoint" />
+            <mxPoint x="546" y="492" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
